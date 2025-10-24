@@ -14,6 +14,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 
 
+COPY dualshock_publisher.py .
+COPY dualshock_mappings.py .
+
 # Command to run the application
 CMD ["python", "dualshock_publisher.py"]
-
