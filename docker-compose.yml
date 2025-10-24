@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  dualshock_publisher:
+    build:
+      context: ./dualshock_publisher
+      dockerfile: Dockerfile
+    privileged: true # Needed to access /dev/input devices
+    volumes:
+      - /dev/input:/dev/input # Mount host's input devices
+      - ./dualshock_publisher:/app # Mount the application directory for live code changes
+    ports:
+      - "5556:5556" # Expose ZeroMQ port
+    restart: unless-stopped
