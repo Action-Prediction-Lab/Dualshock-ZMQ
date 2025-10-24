@@ -1,6 +1,8 @@
 import pygame
 import zmq
 import time
+import json
+from dualshock_mappings import AXIS_MAP, BUTTON_MAP, HAT_MAP
 
 # Initialize Pygame
 pygame.init()
@@ -31,21 +33,25 @@ try:
         # Get joystick axis values
         axes = {}
         for i in range(joystick.get_numaxes()):
-            axes[f"axis_{i}"] = joystick.get_axis(i)
+            axis_name = AXIS_MAP.get(i, f"axis_{i}")
+            axes[axis_name] = joystick.get_axis(i)
 
         # Get joystick button values
         buttons = {}
         for i in range(joystick.get_numbuttons()):
-            buttons[f"button_{i}"] = joystick.get_button(i)
+            button_name = BUTTON_MAP.get(i, f"button_{i}")
+            buttons[button_name] = bool(joystick.get_button(i)) # Convert to boolean
 
         # Get joystick hat values (D-pad)
         hats = {}
         for i in range(joystick.get_numhats()):
-            hats[f"hat_{i}"] = joystick.get_hat(i)
+            hat_name = HAT_MAP.get(i, f"hat_{i}")
+            hats[hat_name] = joystick.get_hat(i)
 
-        # Create a message (you can customize the format)
+        # Create a message
         message = {
             "timestamp": time.time(),
+            "controller_name": joystick.get_name(),
             "axes": axes,
             "buttons": buttons,
             "hats": hats

@@ -28,3 +28,25 @@ This application captures input from a Dualshock controller and publishes it via
 ### Accessing Controller Input
 
 The application requires access to `/dev/input` on the host system to read joystick events. The `docker-compose.yml` file is configured to mount this directory into the container and runs the container in `privileged` mode to facilitate this access.
+
+### Customizing Controller Mappings
+
+The specific mappings for axes, buttons, and hats can vary between different Dualshock controller models, operating systems, and drivers. The application uses a separate file, `dualshock_publisher/dualshock_mappings.py`, to define these mappings.
+
+1.  **Discover your controller's mappings:**
+    Use the provided utility script to identify the raw input indices for your specific controller:
+    ```bash
+    python Dualshock/dualshock_publisher/dualshock_mapper_utility.py
+    ```
+    Interact with your controller (move sticks, press buttons, use the D-pad) and note the `Axis X`, `Button Y`, and `Hat Z` values that correspond to each physical input.
+
+2.  **Edit `dualshock_publisher/dualshock_mappings.py`:**
+    Open `dualshock_publisher/dualshock_mappings.py` and update the `AXIS_MAP`, `BUTTON_MAP`, and `HAT_MAP` dictionaries with your discovered mappings. Assign descriptive, human-readable names to each index.
+
+    For example, if `Axis 6` corresponds to your L2 trigger, you would add or modify the entry in `AXIS_MAP` like so: `6: "l2_trigger"`.
+
+3.  **Restart the publisher container:** After modifying `dualshock_publisher/dualshock_mappings.py`, restart your Docker container to apply the changes:
+    ```bash
+    docker compose down
+    docker compose up -d
+    ```
