@@ -1,7 +1,7 @@
 # dualshock_mappings.py
 
-# Dualshock Controller Mappings (User-derived)
-# These mappings can vary based on OS, controller model, and drivers.
+# Dualshock Controller Mappings
+
 # Use dualshock_mapper_utility.py to find your specific mappings.
 
 AXIS_MAP = {
