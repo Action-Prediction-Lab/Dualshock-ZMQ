@@ -1,7 +1,7 @@
 import pygame
 import time
 
-# Initialize Pygame
+# Initialise Pygame
 pygame.init()
 pygame.joystick.init()
 
@@ -10,7 +10,7 @@ if pygame.joystick.get_count() == 0:
     print("No joystick found. Please connect a Dualshock controller.")
     exit()
 
-# Initialize the first joystick
+# Initialise the first joystick
 joystick = pygame.joystick.Joystick(0)
 joystick.init()
 

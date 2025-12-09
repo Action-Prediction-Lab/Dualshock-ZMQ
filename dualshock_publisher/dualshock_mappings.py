@@ -10,7 +10,6 @@ AXIS_MAP = {
     2: "unmapped_axis_2",
     3: "right_stick_x",
     4: "right_stick_y",
-    # Axis 5 is consistently -1.0, likely not an active analog axis for this controller
 }
 
 BUTTON_MAP = {
@@ -30,5 +29,5 @@ BUTTON_MAP = {
 }
 
 HAT_MAP = {
-    0: "dpad", # Value will be a tuple (x, y)
+    0: "dpad", 
 }

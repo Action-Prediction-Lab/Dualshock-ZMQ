@@ -4,7 +4,7 @@ import time
 import json
 from dualshock_mappings import AXIS_MAP, BUTTON_MAP, HAT_MAP
 
-# Initialize Pygame
+# Initialise Pygame
 pygame.init()
 pygame.joystick.init()
 
@@ -17,7 +17,7 @@ if pygame.joystick.get_count() == 0:
 joystick = pygame.joystick.Joystick(0)
 joystick.init()
 
-print(f"Initialized Joystick: {joystick.get_name()}")
+print(f"Initialised Joystick: {joystick.get_name()}")
 
 # Setup ZeroMQ publisher
 context = zmq.Context()
@@ -59,9 +59,7 @@ try:
 
         # Convert message to string and publish
         publisher.send_json(message)
-        # print(f"Published: {message}") # Uncomment for debugging
-
-        time.sleep(0.01) # Small delay to prevent busy-waiting
+        time.sleep(0.01) # Delay to prevent busy-waiting
 
 except KeyboardInterrupt:
     print("Exiting.")

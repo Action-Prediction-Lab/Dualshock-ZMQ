@@ -5,7 +5,6 @@ context = zmq.Context()
 subscriber = context.socket(zmq.SUB)
 
 # Connect to the publisher running in the Docker container
-# Assuming the publisher is exposed on localhost:5556
 subscriber.connect("tcp://localhost:5556")
 
 # Subscribe to all messages (empty subscription)

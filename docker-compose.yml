@@ -5,10 +5,10 @@ services:
     build:
       context: ./dualshock_publisher
       dockerfile: Dockerfile
-    privileged: true # Needed to access /dev/input devices
+    privileged: true 
     volumes:
-      - /dev/input:/dev/input # Mount host's input devices
-      - ./dualshock_publisher:/app # Mount the application directory for live code changes
+      - /dev/input:/dev/input 
+      - ./dualshock_publisher:/app 
     ports:
       - "5556:5556" # Expose ZeroMQ port
     restart: unless-stopped
