@@ -2,23 +2,33 @@
 
 ## Dualshock Publisher Application
 
-This application captures input from a Dualshock controller and publishes it via ZeroMQ.
+This is my containerised application that captures input from a Dualshock controller and publishes it via ZeroMq.
+
+### ZeroMQ Message Format
+
+The Dualshock Publisher broadcasts controller input as JSON messages over ZeroMQ. Each message is a dictionary containing the following keys:
+
+*   **`timestamp`**: A float representing the time the message was generated (Python's `time.time()`).
+*   **`controller_name`**: A string identifying the detected Dualshock controller (e.g., "Wireless Controller").
+*   **`axes`**: A dictionary where keys are axis names (as defined in `dualshock_mappings.py`) and values are float readings from -1.0 to 1.0 (or 0.0 to 1.0 for triggers).
+    *   Example: `"left_stick_x": 0.5432`
+*   **`buttons`**: A dictionary where keys are button names (as defined in `dualshock_mappings.py`) and values are boolean (`true`/`false`) indicating if the button is currently pressed.
+    *   Example: `"cross": true`
+*   **`hats`**: A dictionary where keys are hat names (as defined in `dualshock_mappings.py`) and values are tuples representing the D-pad state. The tuple contains two integers, (x, y), where x is -1 for left, 1 for right, and 0 for neutral; y is -1 for down, 1 for up, and 0 for neutral.
+    *   Example: `"dpad": (0, 1)` (D-pad Up pressed)
 
 ### Setup and Run with Docker Compose
 
-1.  **Ensure Docker is running:** Make sure Docker Desktop or Docker Engine is installed and running on your system.
+1.  **Ensure Docker is running:** 
 
-2.  **Connect your Dualshock controller:** Connect your Dualshock controller to your computer via USB or Bluetooth.
+2.  **Connect your Dualshock controller:** Via USB or Bluetooth.
 
-3.  **Build and run the container:** Navigate to the root directory of this project in your terminal and run:
+3.  **Build and run the container:** Run:
     ```bash
     docker-compose up --build -d
     ```
-    The `--build` flag will build the Docker image (if not already built or if changes were made to the Dockerfile/context), and `-d` will run the container in detached mode.
-    
-    **Live Code Changes:** Due to the volume mount, any changes you make to `dualshock_publisher.py` on your host machine will be immediately reflected inside the running container without needing to rebuild the image.
 
-4.  **Verify the publisher:** The ZeroMQ publisher will be running inside the container, binding to `tcp://*:5556`. You can connect to this address from another application to receive controller input data (test with `dualshock_subscriber.py` from your local machine). 
+4.  **Verify the publisher:** The ZeroMQ publisher runs inside the container, binding to `tcp://*:5556`. Connect to this address from another application to receive controller input data (test with `dualshock_subscriber.py` from your machine).
 
 5.  **Stop the container:** To stop the running container, use:
     ```bash
@@ -27,26 +37,20 @@ This application captures input from a Dualshock controller and publishes it via
 
 ### Accessing Controller Input
 
-The application requires access to `/dev/input` on the host system to read joystick events. The `docker-compose.yml` file is configured to mount this directory into the container and runs the container in `privileged` mode to facilitate this access.
+The application needs access to `/dev/input` on the host system to read joystick events. The `docker-compose.yml` file is configured to mount this directory into the container and runs the container in `privileged` mode to do so.
 
-### Customizing Controller Mappings
+### Customising Controller Mappings
 
-The specific mappings for axes, buttons, and hats can vary between different Dualshock controller models, operating systems, and drivers. The application uses a separate file, `dualshock_publisher/dualshock_mappings.py`, to define these mappings.
+The specific mappings for axes, buttons, and hats can vary between different Dualshock controller models. `dualshock_publisher/dualshock_mappings.py` is used to define these mappings.
 
-1.  **Discover your controller's mappings:**
-    Use the provided utility script to identify the raw input indices for your specific controller:
+1.  **Find your controller's mappings:**
+    Use `dualshock_mapper_utility` to identify the raw input for your specific controller:
     ```bash
     python Dualshock/dualshock_publisher/dualshock_mapper_utility.py
     ```
-    Interact with your controller (move sticks, press buttons, use the D-pad) and note the `Axis X`, `Button Y`, and `Hat Z` values that correspond to each physical input.
+2.  Play with your controller. 
 
-2.  **Edit `dualshock_publisher/dualshock_mappings.py`:**
-    Open `dualshock_publisher/dualshock_mappings.py` and update the `AXIS_MAP`, `BUTTON_MAP`, and `HAT_MAP` dictionaries with your discovered mappings. Assign descriptive, human-readable names to each index.
+3.  **Edit `dualshock_publisher/dualshock_mappings.py`:**
+    Open `dualshock_publisher/dualshock_mappings.py` and update the `AXIS_MAP`, `BUTTON_MAP`, and `HAT_MAP` dictionaries with your mappings.
 
-    For example, if `Axis 6` corresponds to your L2 trigger, you would add or modify the entry in `AXIS_MAP` like so: `6: "l2_trigger"`.
-
-3.  **Restart the publisher container:** After modifying `dualshock_publisher/dualshock_mappings.py`, restart your Docker container to apply the changes:
-    ```bash
-    docker compose down
-    docker compose up -d
-    ```
+4.  **Restart the publisher container:** 
