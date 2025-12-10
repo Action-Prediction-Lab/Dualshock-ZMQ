@@ -8,6 +8,12 @@ subscriber = context.socket(zmq.SUB)
 # Connect to the publisher running in the Docker container
 zmq_host = os.environ.get('ZMQ_HOST', 'localhost')
 zmq_port = os.environ.get('ZMQ_PORT', '5556')
+
+# We assume a '*' is from a publisher's .env file and we should
+# connect to localhost instead.
+if zmq_host == '*':
+    zmq_host = 'localhost'
+
 subscriber.connect(f"tcp://{zmq_host}:{zmq_port}")
 
 # Subscribe to all messages (empty subscription)
