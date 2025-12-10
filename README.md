@@ -25,29 +25,15 @@ The Dualshock Publisher broadcasts controller input as JSON messages over ZeroMQ
 
 3.  **Build and run the container:** Run:
     ```bash
-    docker-compose up --build -d
+    docker compose up --build -d
     ```
 
 4.  **Verify the publisher:** The ZeroMQ publisher runs inside the container. By default, it binds to `tcp://*:5556`. You can connect to this address from another application to receive controller input data (e.g., test with `dualshock_subscriber.py` from your machine, which connects to `tcp://localhost:5556` by default).
 
 5.  **Stop the container:** To stop the running container, use:
     ```bash
-    docker-compose down
+    docker compose down
     ```
-
-### Configuration
-
-You can configure the ZeroMQ publisher's binding address by creating a `.env` file in the root of the project. This file can contain the following environment variables:
-
-*   `ZMQ_HOST`: The host address for the ZeroMQ publisher to bind to. Defaults to `*`.
-*   `ZMQ_PORT`: The port for the ZeroMQ publisher. Defaults to `5556`.
-
-**Example `.env` file:**
-```
-ZMQ_HOST=0.0.0.0
-ZMQ_PORT=5557
-```
-The `dualshock_subscriber.py` script can also be configured with these environment variables. `ZMQ_HOST` defaults to `localhost` and `ZMQ_PORT` defaults to `5556`.
 
 ### Accessing Controller Input
 
