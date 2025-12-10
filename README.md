@@ -1,4 +1,4 @@
-# Dualshock
+# Dualshock-ZMQ
 
 ## Dualshock Publisher Application
 
