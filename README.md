@@ -25,14 +25,14 @@ The Dualshock Publisher broadcasts controller input as JSON messages over ZeroMQ
 
 3.  **Build and run the container:** Run:
     ```bash
-    docker-compose up --build -d
+    docker compose up --build -d
     ```
 
-4.  **Verify the publisher:** The ZeroMQ publisher runs inside the container, binding to `tcp://*:5556`. Connect to this address from another application to receive controller input data (test with `dualshock_subscriber.py` from your machine).
+4.  **Verify the publisher:** The ZeroMQ publisher runs inside the container. By default, it binds to `tcp://*:5556`. You can connect to this address from another application to receive controller input data (e.g., test with `dualshock_subscriber.py` from your machine, which connects to `tcp://localhost:5556` by default).
 
 5.  **Stop the container:** To stop the running container, use:
     ```bash
-    docker-compose down
+    docker compose down
     ```
 
 ### Accessing Controller Input

@@ -5,10 +5,13 @@ services:
     build:
       context: ./dualshock_publisher
       dockerfile: Dockerfile
-    privileged: true 
+    env_file:
+      - .env
+    privileged: true
     volumes:
-      - /dev/input:/dev/input 
-      - ./dualshock_publisher:/app 
+      - /dev/input:/dev/input
+      - ./dualshock_publisher:/app
     ports:
-      - "5556:5556" # Expose ZeroMQ port
+      - "${ZMQ_PORT:-5556}:${ZMQ_PORT:-5556}" # Expose ZeroMQ port
+    command: python -u dualshock_publisher.py
     restart: unless-stopped
