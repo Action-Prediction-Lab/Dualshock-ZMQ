@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   dualshock_publisher:
+    image: ghcr.io/action-prediction-lab/dualshock-zmq:latest
     build:
       context: ./dualshock_publisher
       dockerfile: Dockerfile
